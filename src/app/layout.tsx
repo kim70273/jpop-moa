@@ -35,7 +35,11 @@ export default function RootLayout({
         <ThemeRegistry>
           <Providers>
             <Box
-              sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: '100vh',
+              }}
             >
               <Header />
               <Container component="main" sx={{ mt: 4, mb: 4, flexGrow: 1 }}>

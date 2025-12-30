@@ -13,7 +13,11 @@ export default function Header() {
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          <Link href="/" passHref style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Link
+            href="/"
+            passHref
+            style={{ textDecoration: 'none', color: 'inherit' }}
+          >
             JPOP-MOA
           </Link>
         </Typography>

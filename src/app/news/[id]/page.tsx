@@ -81,7 +81,14 @@ export default function NewsDetailPage() {
       {newsItem.sourceUrl && (
         <Box sx={{ mt: 3 }}>
           <Typography variant="body2">
-            원문: <Link href={newsItem.sourceUrl} target="_blank" rel="noopener noreferrer">{newsItem.sourceUrl}</Link>
+            원문:{' '}
+            <Link
+              href={newsItem.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {newsItem.sourceUrl}
+            </Link>
           </Typography>
         </Box>
       )}

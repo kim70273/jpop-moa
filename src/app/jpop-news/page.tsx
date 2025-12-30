@@ -23,9 +23,8 @@ export default function JpopNewsPage() {
   );
   const [selectedCategory, setSelectedCategory] = React.useState('');
   const [searchTerm, setSearchTerm] = React.useState('');
-  const [searchFields, setSearchFields] = React.useState<string>(
-    'title,content',
-  );
+  const [searchFields, setSearchFields] =
+    React.useState<string>('title,content');
 
   const debouncedArtistId = useDebounce(selectedArtist?.id, 300);
   const debouncedCategory = useDebounce(selectedCategory, 300);

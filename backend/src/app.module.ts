@@ -25,19 +25,32 @@ import { YoutubeModule } from './youtube/youtube.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('DB_HOST', 'localhost'),
-        port: configService.get<number>('DB_PORT', 5432),
-        username: configService.get<string>('DB_USERNAME', 'postgres'),
-        password: configService.get<string>('DB_PASSWORD', 'password'),
-        database: configService.get<string>('DB_DATABASE', 'jpop-moa'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        // synchronize: true is not recommended for production.
-        // It automatically creates the DB schema on every application launch.
-        // Use migrations for production environments.
-        synchronize: true,
-      }),
+      useFactory: (configService: ConfigService) => {
+        const databaseUrl = configService.get<string>('DATABASE_URL');
+        if (databaseUrl) {
+          // Use the connection string if it exists (for Render/production)
+          return {
+            type: 'postgres',
+            url: databaseUrl,
+            entities: [__dirname + '/**/*.entity{.ts,.js}'],
+            synchronize: true, // For production, consider using migrations instead.
+            ssl: {
+              rejectUnauthorized: false, // Required for many cloud database providers
+            },
+          };
+        }
+        // Fallback to individual variables if DATABASE_URL doesn't exist (for local dev)
+        return {
+          type: 'postgres',
+          host: configService.get<string>('DB_HOST', 'localhost'),
+          port: configService.get<number>('DB_PORT', 5432),
+          username: configService.get<string>('DB_USERNAME', 'postgres'),
+          password: configService.get<string>('DB_PASSWORD', 'password'),
+          database: configService.get<string>('DB_DATABASE', 'jpop-moa'),
+          entities: [__dirname + '/**/*.entity{.ts,.js}'],
+          synchronize: true,
+        };
+      },
     }),
     ScheduleModule.forRoot(), // Add this line
     ArtistsModule,

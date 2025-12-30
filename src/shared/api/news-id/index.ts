@@ -22,7 +22,9 @@ export async function getNewsById(
   params: GetNewsByIdParams,
 ): Promise<GetNewsByIdResponse> {
   const validatedParams = GetNewsByIdParamsSchema.parse(params);
-  const response = await api.get(`${ENDPOINT_GET_NEWS_BY_ID}/${validatedParams.id}`);
+  const response = await api.get(
+    `${ENDPOINT_GET_NEWS_BY_ID}/${validatedParams.id}`,
+  );
   return GetNewsByIdResponseSchema.parse(response.data);
 }
 

@@ -18,7 +18,10 @@ export class ArtistsService {
       koreanName && koreanName !== 'Not Found' ? koreanName : name; // Use name as fallback
 
     if (!artist) {
-      artist = this.artistsRepository.create({ name, koreanName: finalKoreanName });
+      artist = this.artistsRepository.create({
+        name,
+        koreanName: finalKoreanName,
+      });
       await this.artistsRepository.save(artist);
     } else if (finalKoreanName && !artist.koreanName) {
       // If artist exists but koreanName is not set, update it
@@ -28,10 +31,7 @@ export class ArtistsService {
     return artist;
   }
 
-  async findAll(
-    search?: string,
-    limit?: number,
-  ): Promise<Artist[]> {
+  async findAll(search?: string, limit?: number): Promise<Artist[]> {
     const findOptions: FindManyOptions<Artist> = {};
     if (search) {
       findOptions.where = [

@@ -21,10 +21,7 @@ export default function NewsFilters({
 }: NewsFiltersProps) {
   return (
     <Box sx={{ display: 'flex', gap: 2, mb: 4, alignItems: 'center' }}>
-      <ArtistFilter
-        selectedArtist={selectedArtist}
-        onChange={onArtistChange}
-      />
+      <ArtistFilter selectedArtist={selectedArtist} onChange={onArtistChange} />
       <CategoryFilter
         selectedCategory={selectedCategory}
         onChange={onCategoryChange}
