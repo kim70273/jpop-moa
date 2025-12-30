@@ -1,0 +1,36 @@
+name: Deploy Staging to Production
+
+on:
+  # 1. 매주 화요일 오전 10시 (UTC 기준 1시)에 자동으로 실행
+  schedule:
+    - cron: '0 1 * * 2'
+  # 2. GitHub Actions 탭에서 수동으로 실행 가능하도록 설정
+  workflow_dispatch:
+
+jobs:
+  merge-staging-to-prod:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # 모든 브랜치와 히스토리를 가져옴
+          fetch-depth: 0
+          # GitHub Actions에서 push하려면 PAT(Personal Access Token)가 필요합니다.
+          # 저장소 Secrets에 'GH_PAT'라는 이름으로 PAT를 저장해주세요.
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Set up Git user
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+
+      - name: Merge staging into production
+        run: |
+          git checkout production
+          git pull origin production
+          # staging 브랜치의 내용을 production으로 병합 (Fast-forward only)
+          git merge --ff-only origin/staging
+          git push origin production
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
