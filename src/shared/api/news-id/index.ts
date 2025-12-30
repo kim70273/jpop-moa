@@ -19,8 +19,11 @@ export type GetNewsByIdResponse = z.infer<typeof GetNewsByIdResponseSchema>;
 // Fetcher function
 export async function getNewsById(
   api: AxiosInstance,
-  params: GetNewsByIdParams,
+  params?: GetNewsByIdParams,
 ): Promise<GetNewsByIdResponse> {
+  if (!params?.id) {
+    throw new Error('News ID is required');
+  }
   const validatedParams = GetNewsByIdParamsSchema.parse(params);
   const response = await api.get(
     `${ENDPOINT_GET_NEWS_BY_ID}/${validatedParams.id}`,
