@@ -53,7 +53,10 @@ export class YoutubeService {
             response.data.items.map((item) => ({
               videoId: item.id.videoId,
               title: item.snippet.title,
-              thumbnailUrl: item.snippet.thumbnails.default.url,
+              thumbnailUrl:
+                item.snippet.thumbnails.high?.url ||
+                item.snippet.thumbnails.medium?.url ||
+                item.snippet.thumbnails.default.url,
             })),
           ),
           tap((data) =>
