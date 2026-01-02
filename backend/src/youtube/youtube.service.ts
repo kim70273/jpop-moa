@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
-import { firstValueFrom, map } from 'rxjs';
+import { firstValueFrom, map, tap } from 'rxjs';
 import { AxiosError } from 'axios';
 
 @Injectable()
@@ -38,6 +38,14 @@ export class YoutubeService {
         publishedAfter: sevenDaysAgo.toISOString(),
       };
 
+      this.logger.log(
+        `Sending request to YouTube API with params: ${JSON.stringify(
+          params,
+          null,
+          2,
+        )}`,
+      );
+
       const response$ = this.httpService
         .get(this.YOUTUBE_API_URL, { params })
         .pipe(
@@ -47,6 +55,15 @@ export class YoutubeService {
               title: item.snippet.title,
               thumbnailUrl: item.snippet.thumbnails.default.url,
             })),
+          ),
+          tap((data) =>
+            this.logger.log(
+              `Successfully fetched and transformed data: ${JSON.stringify(
+                data,
+                null,
+                2,
+              )}`,
+            ),
           ),
         );
 

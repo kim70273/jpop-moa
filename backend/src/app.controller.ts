@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Logger } from '@nestjs/common';
 import { AppService } from './app.service';
 import { NewsProcessorService } from './news-processor/news-processor.service';
 import { performance } from 'perf_hooks';
@@ -8,6 +8,8 @@ import { performance } from 'perf_hooks';
 // 컨트롤러는 url을 가져오는 역함, 서비스는 비즈니스 기능
 @Controller()
 export class AppController {
+  private readonly logger = new Logger(AppController.name);
+
   constructor(
     private readonly appService: AppService,
     private readonly newsProcessorService: NewsProcessorService,
@@ -16,6 +18,7 @@ export class AppController {
   // Get과 같은 데코레이터는 바로아래에 꾸며주는 함수나 클래스가 있어야된다(한칸 더 띄우거나 하면 안됨)
   @Get()
   getHello(): string {
+    this.logger.log('GET / endpoint triggered (Health Check OK)');
     return this.appService.getHello();
   }
 
