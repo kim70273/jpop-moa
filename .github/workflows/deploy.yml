@@ -34,3 +34,11 @@ jobs:
           git push origin production
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+
+      - name: Reset Staging Branch
+        run: |
+          git checkout staging
+          git reset --hard origin/main
+          git push --force origin staging
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}

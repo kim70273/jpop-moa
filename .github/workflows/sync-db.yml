@@ -1,0 +1,23 @@
+name: Sync Production DB to Staging
+
+on:
+  # 매일 새벽 2시 (UTC 기준)에 실행
+  schedule:
+    - cron: '0 2 * * *'
+  # 수동 실행 옵션
+  workflow_dispatch:
+
+jobs:
+  sync-db:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Dump Production DB and Restore to Staging DB
+        run: |
+          echo "Dumping production database..."
+          pg_dump --verbose --clean --no-owner --no-acl -F c "${{ secrets.PROD_DB_URL }}" > prod_dump.dump
+          
+          echo "Restoring to staging database..."
+          pg_restore --verbose --clean --no-owner --no-acl -d "${{ secrets.STAGING_DB_URL }}" prod_dump.dump
